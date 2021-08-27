@@ -1,14 +1,18 @@
 package crmScenario;
 
 import io.github.bonigarcia.wdm.WebDriverManager;
-import org.openqa.selenium.*;
+import org.openqa.selenium.By;
+import org.openqa.selenium.Keys;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
-import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.support.ui.WebDriverWait;
+
 import java.util.List;
+import java.util.UUID;
 
 public class ScenarioCreateProject {
     private static WebDriver driver;
@@ -16,10 +20,7 @@ public class ScenarioCreateProject {
     public static void main(String[] args) throws InterruptedException {
         WebDriverManager.chromedriver().setup();
 
-        //scenarioWithExtention();
-
         driver = new ChromeDriver();
-        //runJsScriptExample();
 
         driver.manage().window().maximize();
         WebDriverWait webDriverWait = new WebDriverWait(driver, 5);
@@ -36,7 +37,9 @@ public class ScenarioCreateProject {
         driver.findElement(By.xpath("//a[text()='Создать проект']")).click();
 
         webDriverWait.until(ExpectedConditions.elementToBeClickable(By.name("crm_project[name]")));
-        driver.findElement(By.name("crm_project[name]")).sendKeys("crm_project[name]");
+
+        String projectName = "NNN-project_" + UUID.randomUUID();
+        driver.findElement(By.name("crm_project[name]")).sendKeys(projectName);
 
         driver.findElement(By.xpath("//span[text()='Укажите организацию']")).click();
         driver.findElement(By.xpath("//div[@id='select2-drop']//input")).sendKeys("test");
@@ -49,7 +52,7 @@ public class ScenarioCreateProject {
                 By.xpath("//div[contains(@id, 's2id_crm_project_contactMain-uid')]/a")));
         webDriverWait.until(ExpectedConditions.textToBePresentInElement(
                 driver.findElement(By.xpath("//div[contains(@id, 's2id_crm_project_company')]/a")), "123test"));
-        Thread.sleep(1000);//TODO: подебажить это ожидание
+        Thread.sleep(1000);
         webDriverWait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//div[@class='select2-container select2']")));
         driver.findElement(By.xpath("//div[contains(@id, 's2id_crm_project_contactMain-uid')]/a")).click();
         webDriverWait.until(ExpectedConditions.elementToBeClickable(By.xpath("//div[@id='select2-drop']//input")));
@@ -116,7 +119,7 @@ public class ScenarioCreateProject {
             webDriverWait.until(ExpectedConditions.elementToBeClickable(By.xpath(xPath)));
             driver.findElement(By.xpath(xPath)).sendKeys(Keys.SPACE);
         }
-        //
+
         {
             String xpathSelect = "//select[contains(@id, 'crm_project_businessUnit')]";
             Select dropdown = new Select(driver.findElement(By.xpath(xpathSelect)));
@@ -146,15 +149,25 @@ public class ScenarioCreateProject {
         //менедж
         {
             String xpathSelect = "//select[contains(@id, 'crm_project_manager')]";
-            Select dropdown = new Select(driver.findElement(By.xpath(xpathSelect)));
+            WebElement element = driver.findElement(By.xpath(xpathSelect));
+            Select dropdown = new Select(element);
             dropdown.selectByIndex(1);
+            element.sendKeys(Keys.ENTER);
         }
 
         //сохранить
-        driver.findElement(By.xpath("//button[contains(@type, 'submit')and contains(@class, 'btn-primary')]")).click();
+        {
+            String xpathExpression = "//button[contains(@type, 'submit')and contains(@class, 'btn-primary')]";
+
+            Actions actions1 = new Actions(driver);
+            WebElement projectMenuElement1 = driver.findElement(By.xpath(xpathExpression));
+            actions1.moveToElement(projectMenuElement1).perform();
+
+            webDriverWait.until(ExpectedConditions.elementToBeClickable(By.xpath(xpathExpression)));
+            driver.findElement(By.xpath(xpathExpression)).click();
+        }
 
         Thread.sleep(5000);
-
         driver.switchTo().parentFrame();
     }
 
@@ -163,25 +176,5 @@ public class ScenarioCreateProject {
         driver.findElement(By.id("prependedInput")).sendKeys("Applanatest1");
         driver.findElement(By.id("prependedInput2")).sendKeys("Student2020!");
         driver.findElement(By.xpath("//button")).click();
-    }
-
-    public static void scenarioWithExtention() throws InterruptedException {
-        ChromeOptions chromeOptions = new ChromeOptions();
-        chromeOptions.addArguments("user-data-dir=src/main/resources/chrome_profile");
-        driver = new ChromeDriver(chromeOptions);
-        driver.get("https://afisha.ru");
-        Thread.sleep(10000);
-    }
-
-    public static void runJsScriptExample() throws InterruptedException {
-        driver.get("https://afisha.ru");
-        JavascriptExecutor javascriptExecutor = (JavascriptExecutor) driver;
-
-        javascriptExecutor.executeScript("function getElementByXpath(path) {\n" +
-                "  return document.evaluate(path, document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null).singleNodeValue;\n" +
-                "}\n" +
-                "\n" +
-                "getElementByXpath(\"//div[@data-test='HONEY-AD AD-ad_1']\").remove();");
-        Thread.sleep(10000);
     }
 }

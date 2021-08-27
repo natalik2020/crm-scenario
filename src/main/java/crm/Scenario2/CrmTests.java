@@ -1,4 +1,4 @@
-package crmScenario;
+package crm.Scenario2;
 
 import io.github.bonigarcia.wdm.WebDriverManager;
 import org.openqa.selenium.By;
@@ -45,7 +45,7 @@ public class CrmTests {
     }
 
     public static void loginToCrm() {
-        driver.get("https://www.litlib.net/");
+        driver.get("https://crm.geekbrains.space/user/login");
         driver.findElement(By.id("prependedInput")).sendKeys("Applanatest1");
         driver.findElement(By.id("prependedInput2")).sendKeys("Student2020!");
         driver.findElement(By.xpath("//button")).click();
