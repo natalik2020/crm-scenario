@@ -1,20 +1,18 @@
 package crmScenario;
 
-import io.github.bonigarcia.wdm.WebDriverManager;
 import io.qameta.allure.Description;
 import io.qameta.allure.Step;
-import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.openqa.selenium.By;
 import org.openqa.selenium.Keys;
-import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
-import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.Select;
-import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.util.List;
 import java.util.UUID;
@@ -22,7 +20,7 @@ import java.util.UUID;
 /**
  * Unit test for simple App.
  */
-public class AppTestPageObjectTest {
+public class AppTestPageObjectTest extends BaseTestAbc {
 
     public static final String createProjectLink_XPATH = "//a[text()='Создать проект']";
     public static final String DIV_ID_SELECT_2_DROP_INPUT = "//div[@id='select2-drop']//input";
@@ -35,10 +33,6 @@ public class AppTestPageObjectTest {
     public static final String SUBMIT_AND_CONTAINS_TEXT_ХРАНИТЬ = "//button[contains(@type, 'submit') and contains(text(),'хранить')]";
     public static final String XPATH_NOVAYA_ZAYAVKA = "//a[text()='Новая']";
     public static final String ID_CRM_OWNERSHIPTYPE_NAME = "//input[contains(@id, 'crm_ownershiptype_name')]";
-
-    private static WebDriver driver;
-
-    private WebDriverWait webDriverWait;
 
     @FindBy(xpath = "//a/span[text()='Проекты']")
     WebElement projectMenuElement;
@@ -104,25 +98,11 @@ public class AppTestPageObjectTest {
     @FindBy(id = "prependedInput2")
     WebElement prependedInput2;
 
-    @BeforeAll
-    static void beforeAll() {
-        WebDriverManager.chromedriver().setup();
-    }
-
     @BeforeEach
     public void beforeEach() {
-        driver = new ChromeDriver();
+        initDriver();
         PageFactory.initElements(driver, this);
-
-        driver.manage().window().maximize();
-        webDriverWait = new WebDriverWait(driver, 5);
-
         loginToCrm();
-    }
-
-    @AfterEach
-    void tearDown() {
-        driver.quit();
     }
 
     @Test

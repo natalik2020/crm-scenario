@@ -18,7 +18,7 @@ import java.util.UUID;
 /**
  * Unit test for simple App.
  */
-public class AppTest {
+public class AppTest_NOT_RUN {
 
     private WebDriverWait webDriverWait;
     private static WebDriver driver;

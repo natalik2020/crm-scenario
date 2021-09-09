@@ -5,7 +5,6 @@ import io.qameta.allure.Allure;
 import lesson7.CustomLogger;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.BeforeEach;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.logging.LogEntries;
 import org.openqa.selenium.logging.LogEntry;
@@ -15,7 +14,7 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.util.Iterator;
 
-public class BaseTest {
+public class BaseTestAbc {
     EventFiringWebDriver driver;
     WebDriverWait webDriverWait;
 
@@ -24,7 +23,6 @@ public class BaseTest {
         WebDriverManager.chromedriver().setup();
     }
 
-    @BeforeEach
     void initDriver() {
         driver = new EventFiringWebDriver(new ChromeDriver());
         driver.register(new CustomLogger());

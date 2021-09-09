@@ -1,2 +1,6 @@
 # Project exclude paths
 /target/
+.allure/
+.idea/
+allure-results/
+*.log
